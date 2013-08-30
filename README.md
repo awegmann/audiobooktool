@@ -19,4 +19,6 @@ The native tools versions currently used by myself are ffmpeg 2.0.1 and mp4v2 ve
 Building
 --------
 
-Audiobooktools uses gradle as build system. 
+Audiobooktools uses gradle as build system. To completely build the tool just run *gradle build* which 
+starts downloading of libraries, compile and test.
+
