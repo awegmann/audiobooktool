@@ -13,12 +13,12 @@ class FfmpegTest extends GroovyTestCase {
         antBuilder.copy(file: "src/test/resources/Audiobook_Test_plain.m4a",
                 tofile: "src/test/resources/temp/Audiobook_Test.m4a")
     }
- /*
+
     void tearDown() {
         def antBuilder = new AntBuilder()
         antBuilder.delete(dir:"src/test/resources/temp")
     }
-   */
+
     void testConvertAudioM4a() {
         def audioM4a = new Ffmpeg("src/test/resources/temp/Audiobook_Test.m4a")
         audioM4a.convertToFlac("src/test/resources/temp/Audiobook_Test.flac")
