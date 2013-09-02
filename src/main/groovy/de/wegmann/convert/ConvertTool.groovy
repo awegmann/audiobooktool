@@ -30,6 +30,8 @@ Options:
         def cli = new CliBuilder(usage: 'ConvertTool -a file -m file [-o file]\nconverts an audio file to a ".m4b" audio' +
                 ' book and copies all metadata from another file to it.')
         cli.h(longOpt: 'help', 'usage information')
+        cli.s(longOpt: 'split', 'split one input file to many output files (by chapter info)')
+        cli.j(longOpt: 'join', 'join many input file to one output files (and create chapter info)')
         cli.a(longOpt: 'audioFrom', args: 1, required: true,
                 argName: 'audiofile', 'use audiofile as audio source to convert from')
         cli.m(longOpt: 'metaFrom', args: 1, required: true,
@@ -62,16 +64,8 @@ Options:
             outputFilename = getDefaultOutputFilename(metaFile.getParent(), metaFile.getName())
         }
 
-        println "Converting from " + opt.a + "\n" +
-                "Metadata from.. " + opt.m + "\n" +
-                "Output to...... " + outputFilename;
-
-        if (opt.d) {
-            println "Dry run selected. Stopping now."
-            return
-        }
-
-        doConvertAndCopyMeta(opt.a, opt.m, outputFilename)
+        def command = new ConvertAndCopyMeta(destFile: outputFilename, audioFile: opt.a, metaFile: opt.m, dryRun: opt.d)
+        command.execute()
     }
 
     /**
@@ -80,7 +74,7 @@ Options:
      * @return
      */
     static String getDefaultOutputFilename(String outputDirectory, String metaFilename) {
-        String outputFilename
+        String outputFilename = ""
 
         metaFilename = new File(metaFilename).getName()
         def lastIndexOfDot = metaFilename.lastIndexOf('.')
@@ -100,43 +94,9 @@ Options:
         if (outputFile.exists()) {
             // just to be unique, add a timestamp to basename
             outputFilename = metaFilename.substring(0, lastIndexOfDot) + "-" + (new Date().getDateTimeString()) + ".m4b"
+            outputFile = new File(outputFilename)
         }
         return outputFile.getPath()
     }
 
-    /**
-     * Convert audiofile to destFile and copy meta info from metaFile to destFile.
-     * @param audioFile audio file to convert
-     * @param metaFile meta file to get info from
-     * @param destFile destination file to create
-     */
-    static void doConvertAndCopyMeta(String audioFile, String metaFile, String destFile) {
-        def audioFlac = new Ffmpeg(audioFile)
-        if (destFile.endsWith(".m4a")) {
-            audioFlac.convertToM4a(destFile)
-        } else if (destFile.endsWith(".m4b")) {
-            audioFlac.convertToM4b(destFile)
-        } else {
-            throw new IllegalArgumentException("Output-File muss auf .m4a oder .m4b enden.")
-        }
-
-
-        def mp4art = new Mp4Art(metaFile)
-        def imageFile = mp4art.extractImage(0)
-        def mp4artDest = new Mp4Art(destFile)
-
-        mp4artDest.addImage(imageFile)
-        new File(imageFile).delete()
-
-        def mp4info = new Mp4Info(metaFile)
-        def tags = mp4info.listTags()
-        def mp4tags = new Mp4Tags(destFile)
-        mp4tags.setTags(tags)
-
-        def mp4Chaps = new Mp4Chaps(metaFile)
-        def chapters = mp4Chaps.exportChapters()
-
-        def mp4ChapsDest = new Mp4Chaps(destFile)
-        mp4ChapsDest.importChapters(chapters)
-    }
 }
