@@ -1,12 +1,14 @@
 package de.wegmann.wrapper.ffmpeg
 
 import de.wegmann.wrapper.util.ToolsLocation
+import groovy.time.Duration
 import groovy.util.logging.Log
 
 import java.security.InvalidParameterException
 
 /**
- * User: andy
+ * Wrapper around ffmpeg tool to get info about audio files, convert, merge and split them.
+ * User: Andreas Wegmann
  * Date: 21.06.13
  */
 @Log
@@ -80,6 +82,35 @@ class Ffmpeg {
         process.err.eachLine {
             log.info "> $it"
         }
+    }
+
+    /**
+     * Get duration from audio file.
+     *
+     * ffmpeg is startet with "-i" for the output. Without setting an output file, just the information about
+     * the file is written to stderr. Duration is grabbed from this output.
+     *
+     * @param audiofile the audio file to get duration from
+     * @return duration of audio file
+     */
+    public Duration getDuration() {
+        def file = new File(sourceAudioFile)
+        if (!file.exists()) {
+            throw new IllegalArgumentException("file $sourceAudioFile does not exists")
+        }
+
+        def returnDuration = null
+        def durationFindRegex = /.*Duration: (\d{2}):(\d{2}):(\d{2}).(\d{2}).*/
+        def process = [tools.ffmpegExecutable, "-i", sourceAudioFile].execute()
+        process.err.eachLine {
+            log.info "> $it"
+            def matcher = ( it =~ durationFindRegex )
+            if (matcher.matches()) {
+                log.info "found it"
+                returnDuration = new Duration(0,matcher[0][1].toInteger(),matcher[0][2].toInteger(),matcher[0][3].toInteger(),matcher[0][4].toInteger()*10)
+            }
+        }
+        return returnDuration
 
     }
 }

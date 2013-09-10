@@ -11,7 +11,7 @@ class ToolsLocation {
     }
 
     private ToolsLocation() {
-        def homeConfig = new File('audibletools.config')
+        def homeConfig = new File(System.getProperty("user.home")+'/.audibletools.config')
         if (homeConfig.exists()) {
             def config = new ConfigSlurper().parse(homeConfig.toURL())
             mp4ArtExecutable = config.locations.mp4art
