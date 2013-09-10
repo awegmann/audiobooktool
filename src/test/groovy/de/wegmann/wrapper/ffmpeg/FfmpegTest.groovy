@@ -85,6 +85,6 @@ class FfmpegTest extends GroovyTestCase {
         }
 
         def audiofile = new Ffmpeg("src/test/resources/temp/Audiobook_Test.m4a")
-        assertEquals("got wrong duration from file", new Duration(0,0,0,21,60), audiofile.getDuration())
+        assertEquals("got wrong duration from file", new Duration(0, 0, 0, 21, 60), audiofile.getDuration())
     }
 }

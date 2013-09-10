@@ -11,7 +11,7 @@ class Mp4ArtTest extends GroovyTestCase {
 
     void tearDown() {
         def antBuilder = new AntBuilder()
-        antBuilder.delete(dir:"src/test/resources/temp")
+        antBuilder.delete(dir: "src/test/resources/temp")
     }
 
     public void testList() {
@@ -53,7 +53,7 @@ class Mp4ArtTest extends GroovyTestCase {
         try {
             mp4art.addImage("src/test/resources/Cover.jpg")
             def newList = mp4art.list()
-            assertEquals(2,newList.size())
+            assertEquals(2, newList.size())
         } catch (WrapperException e) {
             assertEquals(e.msg, "error adding image")
         }

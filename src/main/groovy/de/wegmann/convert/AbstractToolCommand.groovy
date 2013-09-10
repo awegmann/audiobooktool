@@ -4,7 +4,7 @@ package de.wegmann.convert
  * User: andy
  * Date: 03.09.13
  */
-abstract class AbstractToolCommand implements ToolCommandIF{
+abstract class AbstractToolCommand implements ToolCommandIF {
     boolean dryRun
 
     @Override

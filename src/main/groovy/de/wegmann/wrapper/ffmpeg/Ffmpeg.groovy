@@ -50,7 +50,6 @@ class Ffmpeg {
         }
     }
 
-
     /**
      * Converts the sourceAudioFile to the destinationAudioFile.
      *
@@ -60,7 +59,8 @@ class Ffmpeg {
         if (!destinationAudioFile.endsWith(".m4b")) {
             throw new IllegalArgumentException("destination file name does not end with '.m4b' <$destinationAudioFile")
         }
-        //def process = [ tools.ffmpegExecutable, "-i", sourceAudioFile, "-codec", "aac", "-f","mp4","-strict", "-2", "-y", destinationAudioFile-".m4b"+".m4a" ].execute()
+        //def process = [ tools.ffmpegExecutable, "-i", sourceAudioFile, "-codec", "aac", "-f","mp4","-strict", "-2",
+        //                 "-y", destinationAudioFile-".m4b"+".m4a" ].execute()
         def intermediateFile = destinationAudioFile - ".m4b" + "-intermediate.m4a"
         def process = [tools.ffmpegExecutable, "-i", sourceAudioFile, "-strict", "-2", "-y", intermediateFile].execute()
         process.err.eachLine {
@@ -104,10 +104,11 @@ class Ffmpeg {
         def process = [tools.ffmpegExecutable, "-i", sourceAudioFile].execute()
         process.err.eachLine {
             log.info "> $it"
-            def matcher = ( it =~ durationFindRegex )
+            def matcher = (it =~ durationFindRegex)
             if (matcher.matches()) {
                 log.info "found it"
-                returnDuration = new Duration(0,matcher[0][1].toInteger(),matcher[0][2].toInteger(),matcher[0][3].toInteger(),matcher[0][4].toInteger()*10)
+                returnDuration = new Duration(0, matcher[0][1].toInteger(), matcher[0][2].toInteger(),
+                        matcher[0][3].toInteger(), matcher[0][4].toInteger() * 10)
             }
         }
         return returnDuration
