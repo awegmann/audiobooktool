@@ -1,6 +1,14 @@
+************************************************************************************************************************************************************************************************
+create for each chapter one mp3 (split into mp3s):
+Example:
+ffmpeg -i Hell\'s\ Corner_\ Camel\ Club\,\ Book\ 5\ David\ Baldacci.flac -ss 00:01:00.00 -t 00:00:15.99 -acodec libmp3lame -ab 128k some.mp3
+
+def process = [tools.ffmpegExecutable, "-i", sourceAudioFile, "-ss", startPoint, "-t", duration, "-acodec", "libmp3lame", "-ab", "128", destinationAudioFile];
+process.execute();
+************************************************************************************************************************************************************************************************
 concat mp3 and recode to m4a:
 
 ffmpeg -i 01.mp3 -i 02.mp3 -i 03.mp3 -i 04.mp3 -i 05.mp3 -i 06.mp3 -i 07.mp3 -i 08.mp3 -i 09.mp3 -i 10.mp3 -filter_complex '[0:0] [1:0] [2:0] concat=n=10:a=1:v=0 [a]' -map '[a]' -strict -2 test.m4a
 
 Info from : https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20%28join%2C%20merge%29%20media%20files
-
+************************************************************************************************************************************************************************************************
