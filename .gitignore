@@ -4,3 +4,10 @@
 /.gradle
 /.classpath
 /.project
+/out
+
+audiobooktool.iml
+
+audiobooktool.iws
+
+audiobooktool.ipr
