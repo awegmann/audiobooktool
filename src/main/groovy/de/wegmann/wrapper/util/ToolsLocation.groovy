@@ -210,4 +210,12 @@ class ToolsLocation {
     }
   }
 
+  /**
+   *
+   * @return the xml configuration itself
+   */
+  def XMLConfiguration getXMLConfig() {
+    return XML_CONFIGURATION;
+  }
+
 }

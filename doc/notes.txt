@@ -5,6 +5,21 @@ ffmpeg -i Hell\'s\ Corner_\ Camel\ Club\,\ Book\ 5\ David\ Baldacci.flac -ss 00:
 
 def process = [tools.ffmpegExecutable, "-i", sourceAudioFile, "-ss", startPoint, "-t", duration, "-acodec", "libmp3lame", "-ab", "128", destinationAudioFile];
 process.execute();
+
+Weitere Infos aus der Docu: (http://ffmpeg.org/ffmpeg.html)
+
+?-t duration (output)?
+  Stop writing the output after its duration reaches duration. duration may be a number in seconds, or in hh:mm:ss[.xxx] form.
+  -to and -t are mutually exclusive and -t has priority.
+
+?-to position (output)?
+  Stop writing the output at position. position may be a number in seconds, or in hh:mm:ss[.xxx] form.
+  -to and -t are mutually exclusive and -t has priority.
+
+?-ss position (input/output)?
+  When used as an input option (before -i), seeks in this input file to position. Note the in most formats it is not possible to seek exactly, so ffmpeg will seek to the closest seek point before position. When transcoding and ?-accurate_seek? is enabled (the default), this extra segment between the seek point and position will be decoded and discarded. When doing stream copy or when ?-noaccurate_seek? is used, it will be preserved.
+  When used as an output option (before an output filename), decodes but discards input until the timestamps reach position.
+  position may be either in seconds or in hh:mm:ss[.xxx] form.
 ************************************************************************************************************************************************************************************************
 concat mp3 and recode to m4a:
 
