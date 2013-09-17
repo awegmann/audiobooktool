@@ -4,3 +4,54 @@ ffmpeg -i 01.mp3 -i 02.mp3 -i 03.mp3 -i 04.mp3 -i 05.mp3 -i 06.mp3 -i 07.mp3 -i 
 
 Info from : https://trac.ffmpeg.org/wiki/How%20to%20concatenate%20%28join%2C%20merge%29%20media%20files
 
+
+
+
+Parameters calling the converter:
+
+$ java -jar build/libs/audiobooktool-1.1.jar
+error: Missing required options: a, m
+usage: ConvertTool -a file -m file [-o file]
+                   converts an audio file to a ".m4b" audio book and
+                   copies all metadata from another file to it.
+ -a,--audioFrom <audiofile>   use audiofile as audio source to convert
+                              from
+ -d,--dryRun                  do not convert, just print what files are
+                              affected
+ -h,--help                    usage information
+ -j,--join                    join many input file to one output files
+                              (and create chapter info)
+ -m,--metaFrom <audiofile>    use audiofile as meta info source to copy
+                              from
+ -o,--outputTo <file>         if file is a directory, put the converted
+                              file in here, if it' a file name use
+                              filename for output (default is base name of
+                              metaFrom-file plus .m4b extension)
+ -s,--split                   split one input file to many output files
+                              (by chapter info)
+
+
+mergeToM4A
+==========
+
+Merging flac+aax -> m4b
+--join -a <flac-file> -m <aax-file> -o <outfile>
+
+Merging flac+aax -> m4b - Bulk mode
+--join --bulk -a <flac-dir> -m <aax-dir> -o <outdir>
+
+Joining mp3 -> m4b
+--join -a <input-dir> -o <outfile.m4b>
+oder
+--join -a <file1> -a <file2> ... -a <fileN> -o <outfile.m4b>
+
+
+splitToMP3
+==========
+
+Splitting flac+aax -> mp3
+--split -a <flac-file> -m <aax-file> -o <output-dir>
+
+Splitting m4b -> mp3
+--split -a <m4b> -> -o <output-dir>
+
