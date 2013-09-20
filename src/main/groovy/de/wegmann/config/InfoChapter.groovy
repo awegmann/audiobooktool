@@ -1,18 +1,14 @@
 package de.wegmann.config;
 
-import de.wegmann.exceptions.NotImplementedException;
-
-import java.io.File;
-import java.util.Date;
-
 /**
- * Created with IntelliJ IDEA.
+ *
  * User: WagnerOl
  * Date: 11.09.13
  * Time: 23:38
- * To change this template use File | Settings | File Templates.
  */
 public class InfoChapter implements Comparable<InfoChapter> {
+
+  protected int cdNo = 1, titleNo = -1;
 
   protected String tsStart, tsEnd;
   private String title;
@@ -20,7 +16,7 @@ public class InfoChapter implements Comparable<InfoChapter> {
   public InfoChapter(String str) {
 
     tsStart = str.substring(0, str.indexOf(" "));
-    title = str.substring(str.indexOf(" "));
+    title = str.substring(str.indexOf(" ") + 1);
 
   }
 
@@ -40,5 +36,20 @@ public class InfoChapter implements Comparable<InfoChapter> {
   @Override
   public int compareTo(InfoChapter infoChapter) {
     return this.tsStart.compareTo(infoChapter.tsStart);
+  }
+
+
+  /********************************************************************************
+   * Getter and setter
+   ********************************************************************************/
+
+
+  /********************************************************************************
+   * Overridden methods
+   ********************************************************************************/
+
+  @Override
+  String toString() {
+    return "$tsStart-$tsEnd : CD: $cdNo; TitleNo: $titleNo; Titel: $title"
   }
 }

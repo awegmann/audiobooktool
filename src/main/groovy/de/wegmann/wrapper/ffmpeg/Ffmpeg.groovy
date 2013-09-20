@@ -1,5 +1,7 @@
 package de.wegmann.wrapper.ffmpeg
 
+import de.wegmann.config.DataObj
+import de.wegmann.config.InfoChapter
 import de.wegmann.wrapper.util.ToolsLocation
 import groovy.util.logging.Log
 
@@ -23,13 +25,26 @@ class Ffmpeg {
     protected String sourceAudioFile
 
     /**
+     *
+     */
+    DataObj dataObject;
+
+    /**
      * Constructor.
      * @param sourceAudioFile audio file to operate on.
      */
     public Ffmpeg(String sourceAudioFile) {
         super();
+        this.dataObject = DataObj.getInstance()
         this.sourceAudioFile = sourceAudioFile;
         this.tools = ToolsLocation.getInstance()
+    }
+
+    public Ffmpeg() {
+      super()
+      this.dataObject = DataObj.getInstance()
+      this.sourceAudioFile = this.dataObject.getFileAudio()
+      this.tools = ToolsLocation.getInstance()
     }
 
     /**
@@ -65,6 +80,41 @@ class Ffmpeg {
             log.info "> $it"
         }
         new File(intermediateFile).renameTo(new File(destinationAudioFile))
+    }
+
+    /**
+     *
+     */
+    public void convertToMP3() {
+
+      Iterator<InfoChapter> infoChapterIterator = dataObject.getBookInfo().getChapterIterator();
+      while (infoChapterIterator.hasNext()) {
+        convertToMP3(infoChapterIterator.next())
+      }
+
+    }
+
+    /**
+     *
+     * @param infoChapter
+     */
+    public void convertToMP3(InfoChapter infoChapter) {
+
+      // ffmpeg -i /bla/Baldacci.flac -ss 00:01:00.00 -t 00:00:15.99 -acodec libmp3lame -ab 128k /bla/some.mp3
+      def process
+
+      if (infoChapter.getTsEnd() != null)
+        process = [dataObject.execFfmpeg, "-i", dataObject.getFileAudio(),
+              "-ss", infoChapter.getTsStart(), "-to", infoChapter.getTsEnd(),
+                dataObject.getFileOutput(infoChapter.getTitleNo(), 3, ".mp3")].execute()
+      else
+        process = [dataObject.execFfmpeg, "-i", dataObject.getFileAudio(),
+                "-ss", infoChapter.getTsStart(),
+                dataObject.getFileOutput(infoChapter.getTitleNo(), 3, ".mp3")].execute()
+
+      process.err.eachLine {
+        log.info "> $it"
+      }
     }
 
     /**

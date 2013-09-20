@@ -1,4 +1,10 @@
 ************************************************************************************************************************************************************************************************
+m4b to splitted mp3s
+
+ffmpeg -i original.m4b -ss 00:01:00.00 -to 00:02:00.00 -acodec libmp3lame -ab 128k test.mp3
+=> ist aber super langsam!!! => 1 Minute in ca. 20 Sekunden ... d.h. 6 Stunden in 2 Stunden ...
+
+************************************************************************************************************************************************************************************************
 create for each chapter one mp3 (split into mp3s):
 Example:
 ffmpeg -i Hell\'s\ Corner_\ Camel\ Club\,\ Book\ 5\ David\ Baldacci.flac -ss 00:01:00.00 -t 00:00:15.99 -acodec libmp3lame -ab 128k some.mp3

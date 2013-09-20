@@ -137,33 +137,33 @@ public class DataObj {
    * Getter and setter
    ***********************************************************************************************/
 
-  public String getExecMp4Art() {
-    return execMp4Art;
-  }
-
-  public String getExecMp4Info() {
-    return execMp4Info;
-  }
-
-  public String getExecMp4Tags() {
-    return execMp4Tags;
-  }
-
-  public String getExecMp4Chaps() {
-    return execMp4Chaps;
-  }
-
-  public String getExecFfmpeg() {
-    return execFfmpeg;
-  }
-
-  public File getFileAudio() {
-    return new File(fileAudio);
-  }
-
-  public File getFileMetaData() {
-    return new File(fileMetaData);
-  }
+//  public String getExecMp4Art() {
+//    return execMp4Art;
+//  }
+//
+//  public String getExecMp4Info() {
+//    return execMp4Info;
+//  }
+//
+//  public String getExecMp4Tags() {
+//    return execMp4Tags;
+//  }
+//
+//  public String getExecMp4Chaps() {
+//    return execMp4Chaps;
+//  }
+//
+//  public String getExecFfmpeg() {
+//    return execFfmpeg;
+//  }
+//
+//  public File getFileAudio() {
+//    return new File(fileAudio);
+//  }
+//
+//  public File getFileMetaData() {
+//    return new File(fileMetaData);
+//  }
 
   /**
    *
@@ -195,17 +195,21 @@ public class DataObj {
     return res;
   }
 
-  public boolean isDryRun() {
-    return dryRun;
-  }
-
-  public OutputFormatEnum getOutputFormat() {
-    return outputFormat;
-  }
-
-  public Date getStartOfConverting() {
-    return startOfConverting;
-  }
+//  public boolean isDryRun() {
+//    return dryRun;
+//  }
+//
+//  public OutputFormatEnum getOutputFormat() {
+//    return outputFormat;
+//  }
+//
+//  public Date getStartOfConverting() {
+//    return startOfConverting;
+//  }
+//
+//  public InfoBook getBookInfo() {
+//    return bookInfo;
+//  }
 
   /***********************************************************************************************
    * Helper methods
@@ -232,12 +236,10 @@ public class DataObj {
    * @return
    */
   private String fillWithZeros(int no, int noOfNumericChars) {
-    StringBuffer sb = new StringBuffer(no);
+    // TODO: Info von Andreas
+    // assert 'x'.padRight(3,'_') == 'x__'
 
-    while(sb.length() < noOfNumericChars)
-      sb.insert(0, "0");
-
-    return sb.toString();
+    return "$no".padLeft(3, '0')
   }
 
   @Override

@@ -1,11 +1,6 @@
 apply plugin: 'groovy'
-apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
-
-// Damit groovy und java aufeinander zur Compile-Zeit zugreifen können.
-sourceSets.main.java.srcDirs = []
-sourceSets.main.groovy.srcDirs += ["src/main/java"]
 
 repositories {
     mavenCentral()
