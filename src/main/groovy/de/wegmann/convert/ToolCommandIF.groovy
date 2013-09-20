@@ -8,7 +8,7 @@ interface ToolCommandIF {
 
     /**
      * Set dry run parameter. If dry run is set to TRUE, all commands just print
-     * out, what they would do, but done convert anything.
+     * out, what they would do, but don't convert anything.
      */
     public void setDryRun(boolean dryRun)
 
