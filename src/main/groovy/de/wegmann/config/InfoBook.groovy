@@ -66,7 +66,6 @@ public class InfoBook {
     year = tag.getFirst(FieldKey.YEAR)
 
     this.cover = tag.getFirst(FieldKey.COVER_ART).getBytes()
-
   }
 
   /**
@@ -142,8 +141,10 @@ public class InfoBook {
     sb.append("Title: $title (number of chapters: " + getNoOfChapters() + ")\n")
     sb.append("Author: $artist \n")
     sb.append("Comment: $comment \n")
+    sb.append("Year: $year \n")
     for (int i = 0; i < getNoOfChapters(); i++) {
-      sb.append("  $i Chapter: " + getChapter(i) + "\n")
+      int chapterNo = i+1
+      sb.append("  " + "$chapterNo".padLeft(3, ' ') + " Chapter: " + getChapter(i) + "\n")
     }
     return sb.toString()
   }

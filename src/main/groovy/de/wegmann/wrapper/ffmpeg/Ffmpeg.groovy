@@ -43,7 +43,7 @@ class Ffmpeg {
     public Ffmpeg() {
       super()
       this.dataObject = DataObj.getInstance()
-      this.sourceAudioFile = this.dataObject.getFileAudio()
+      this.sourceAudioFile = this.dataObject.fileAudio;
       this.tools = ToolsLocation.getInstance()
     }
 
@@ -103,14 +103,14 @@ class Ffmpeg {
       // ffmpeg -i /bla/Baldacci.flac -ss 00:01:00.00 -t 00:00:15.99 -acodec libmp3lame -ab 128k /bla/some.mp3
       def process
 
-      if (infoChapter.getTsEnd() != null)
-        process = [dataObject.execFfmpeg, "-i", dataObject.getFileAudio(),
-              "-ss", infoChapter.getTsStart(), "-to", infoChapter.getTsEnd(),
-                dataObject.getFileOutput(infoChapter.getTitleNo(), 3, ".mp3")].execute()
+      if (infoChapter.tsEnd != null)
+        process = [dataObject.execFfmpeg, "-i", dataObject.fileAudio,
+              "-ss", infoChapter.tsStart, "-to", infoChapter.tsEnd,
+                dataObject.getFileOutput(infoChapter.titleNo, 3, ".mp3")].execute()
       else
-        process = [dataObject.execFfmpeg, "-i", dataObject.getFileAudio(),
-                "-ss", infoChapter.getTsStart(),
-                dataObject.getFileOutput(infoChapter.getTitleNo(), 3, ".mp3")].execute()
+        process = [dataObject.execFfmpeg, "-i", dataObject.fileAudio,
+                "-ss", infoChapter.tsStart,
+                dataObject.getFileOutput(infoChapter.titleNo, 3, ".mp3")].execute()
 
       process.err.eachLine {
         log.info "> $it"

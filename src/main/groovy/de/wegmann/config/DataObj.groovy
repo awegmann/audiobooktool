@@ -23,22 +23,22 @@ public class DataObj {
   private static DataObj instance;
 
   // information from config file
-  private final XMLConfiguration config;
-  private final String execMp4Art;
-  private final String execMp4Info;
-  private final String execMp4Tags;
-  private final String execMp4Chaps;
-  private final String execFfmpeg;
+  final XMLConfiguration config;
+  final String execMp4Art;
+  final String execMp4Info;
+  final String execMp4Tags;
+  final String execMp4Chaps;
+  final String execFfmpeg;
 
   // arguments from command line
-  private String fileAudio, fileMetaData, fileOutputBase;
-  private boolean dryRun;
-  private OutputFormatEnum outputFormat;
+  String fileAudio, fileMetaData, fileOutputBase;
+  boolean dryRun;
+  OutputFormatEnum outputFormat;
 
   // some other information
-  private final Date startOfConverting = new Date();
+  final Date startOfConverting = new Date();
 
-  private InfoBook bookInfo;
+  InfoBook bookInfo;
 
   /**
    * constructor
@@ -99,11 +99,10 @@ public class DataObj {
   private void checkFileOutput() {
 
     if (this.fileOutputBase == null) {
-      fileOutputBase = removeExtention(getFileMetaData().getAbsolutePath());
+      fileOutputBase = removeExtention(new File(fileMetaData).getAbsolutePath());
     } else {
       if (new File(fileOutputBase).isDirectory()) {
-        fileOutputBase = new File(fileOutputBase,
-                removeExtention(getFileMetaData().getName())).getAbsolutePath();
+        fileOutputBase = new File(fileOutputBase, removeExtention(new File(fileMetaData).getName())).getAbsolutePath();
       } else { // so it should be a file reference
         fileOutputBase = removeExtention(fileOutputBase);
       }
@@ -115,21 +114,7 @@ public class DataObj {
    *
    */
   private void analyzeMetaDataFile() {
-    // TODO: get other meta info
-    Mp4Chaps mp4Chaps = new Mp4Chaps(getFileMetaData().getAbsolutePath());
-
-    BufferedReader br = new BufferedReader(new StringReader(mp4Chaps.exportChapters()));
-
-    bookInfo = new InfoBook(null);
-    try {
-      String cur = br.readLine();
-      while (cur != null) {
-        bookInfo.addChapter(cur);
-        cur = br.readLine();
-      }
-    } catch (IOException ioe) {
-      throw new RuntimeException("This can never happen!", ioe);
-    }
+    bookInfo = new InfoBook(new File(fileMetaData));
     bookInfo.sortChaptersAndInsertTSEnd();
   }
 
@@ -220,7 +205,7 @@ public class DataObj {
    * @param str
    * @return
    */
-  private String removeExtention(String str) {
+  public static String removeExtention(String str) {
     int lastIndexOfDot = str.lastIndexOf('.');
     if (lastIndexOfDot != -1) {
       return str.substring(0, lastIndexOfDot);

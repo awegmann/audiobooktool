@@ -8,24 +8,16 @@ package de.wegmann.config;
  */
 public class InfoChapter implements Comparable<InfoChapter> {
 
-  protected int cdNo = 1, titleNo = -1;
+  int cdNo = 1, titleNo = -1;
 
-  protected String tsStart, tsEnd;
-  private String title;
+  String tsStart, tsEnd;
+  String title;
 
   public InfoChapter(String str) {
 
     tsStart = str.substring(0, str.indexOf(" "));
     title = str.substring(str.indexOf(" ") + 1);
 
-  }
-
-  /**
-   * should check if tsStart before tsEnd ... a.s.o.
-   * @return
-   */
-  private boolean checkDataValid() {
-    return true;
   }
 
   /**
@@ -50,6 +42,6 @@ public class InfoChapter implements Comparable<InfoChapter> {
 
   @Override
   String toString() {
-    return "$tsStart-$tsEnd : CD: $cdNo; TitleNo: $titleNo; Titel: $title"
+    return "$tsStart - $tsEnd : CD: $cdNo; TitleNo: $titleNo; Titel: $title"
   }
 }
