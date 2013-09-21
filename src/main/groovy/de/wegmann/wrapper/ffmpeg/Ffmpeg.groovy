@@ -89,7 +89,11 @@ class Ffmpeg {
 
       Iterator<InfoChapter> infoChapterIterator = dataObject.getBookInfo().getChapterIterator();
       while (infoChapterIterator.hasNext()) {
-        convertToMP3(infoChapterIterator.next())
+        InfoChapter cur = infoChapterIterator.next()
+        // convert chapter ...
+        File curOut = convertToMP3(cur)
+        // set tag information ...
+        dataObject.writeMetaDataToChapterFile(curOut, cur)
       }
 
     }
@@ -98,23 +102,28 @@ class Ffmpeg {
      *
      * @param infoChapter
      */
-    public void convertToMP3(InfoChapter infoChapter) {
+    public File convertToMP3(InfoChapter infoChapter) {
+
+      File outFile = dataObject.getFileOutput(infoChapter.titleNo, 3, ".mp3")
 
       // ffmpeg -i /bla/Baldacci.flac -ss 00:01:00.00 -t 00:00:15.99 -acodec libmp3lame -ab 128k /bla/some.mp3
       def process
 
-      if (infoChapter.tsEnd != null)
+      if (infoChapter.tsEnd != null) {
         process = [dataObject.execFfmpeg, "-i", dataObject.fileAudio,
               "-ss", infoChapter.tsStart, "-to", infoChapter.tsEnd,
-                dataObject.getFileOutput(infoChapter.titleNo, 3, ".mp3")].execute()
-      else
+                outFile].execute()
+      } else {
         process = [dataObject.execFfmpeg, "-i", dataObject.fileAudio,
                 "-ss", infoChapter.tsStart,
-                dataObject.getFileOutput(infoChapter.titleNo, 3, ".mp3")].execute()
-
+                outFile].execute()
+      }
       process.err.eachLine {
         log.info "> $it"
       }
+
+      return outFile;
+
     }
 
     /**

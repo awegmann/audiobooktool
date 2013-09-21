@@ -9,6 +9,7 @@ package de.wegmann.config;
 public class InfoChapter implements Comparable<InfoChapter> {
 
   int cdNo = 1, titleNo = -1;
+  int cdNoTotal = -1, titleNoTotal = -1;
 
   String tsStart, tsEnd;
   String title;

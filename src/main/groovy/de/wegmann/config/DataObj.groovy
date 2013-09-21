@@ -2,7 +2,14 @@ package de.wegmann.config;
 
 import de.wegmann.wrapper.mp4v2.Mp4Chaps;
 import de.wegmann.wrapper.util.ToolsLocation;
-import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.XMLConfiguration
+import org.jaudiotagger.audio.AudioFile
+import org.jaudiotagger.audio.AudioFileIO
+import org.jaudiotagger.audio.AudioHeader
+import org.jaudiotagger.tag.FieldKey
+import org.jaudiotagger.tag.Tag
+import org.jaudiotagger.tag.images.Artwork
+import org.jaudiotagger.tag.images.StandardArtwork;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -118,37 +125,44 @@ public class DataObj {
     bookInfo.sortChaptersAndInsertTSEnd();
   }
 
+  public void writeMetaDataToChapterFile(File chapterFile, int chapterIndex) {
+    writeMetaDataToChapterFile(chapterFile, this.bookInfo.getChapter(chapterIndex))
+  }
+
+  /**
+   *
+   * @param chapterFile
+   * @param chapter
+   */
+  public void writeMetaDataToChapterFile(File chapterFile, InfoChapter chapter) {
+
+    AudioFile f = AudioFileIO.read(chapterFile);
+    Tag tag = f.getTag();
+
+    // Tags direct from book info
+    tag.setField(FieldKey.ARTIST, this.bookInfo.artist)
+    tag.setField(FieldKey.ALBUM_ARTIST, this.bookInfo.albumArtist)
+    tag.setField(FieldKey.COMMENT, this.bookInfo.comment)
+    tag.setField(FieldKey.YEAR, this.bookInfo.year)
+    tag.setField(FieldKey.ALBUM, this.bookInfo.title)
+
+    tag.addField(this.bookInfo.cover)
+
+    // Tags direct from chapter ...
+    tag.setField(FieldKey.TITLE, chapter.title)
+    tag.setField(FieldKey.DISC_NO, "" + chapter.cdNo)
+    tag.setField(FieldKey.DISC_TOTAL, "" + chapter.cdNoTotal)
+    tag.setField(FieldKey.TRACK, "" + chapter.titleNo)
+    tag.setField(FieldKey.TRACK_TOTAL, "" + chapter.titleNoTotal)
+
+    f.commit();
+
+  }
+
+
   /***********************************************************************************************
    * Getter and setter
    ***********************************************************************************************/
-
-//  public String getExecMp4Art() {
-//    return execMp4Art;
-//  }
-//
-//  public String getExecMp4Info() {
-//    return execMp4Info;
-//  }
-//
-//  public String getExecMp4Tags() {
-//    return execMp4Tags;
-//  }
-//
-//  public String getExecMp4Chaps() {
-//    return execMp4Chaps;
-//  }
-//
-//  public String getExecFfmpeg() {
-//    return execFfmpeg;
-//  }
-//
-//  public File getFileAudio() {
-//    return new File(fileAudio);
-//  }
-//
-//  public File getFileMetaData() {
-//    return new File(fileMetaData);
-//  }
 
   /**
    *

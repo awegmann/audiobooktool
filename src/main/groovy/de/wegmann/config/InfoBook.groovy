@@ -7,6 +7,7 @@ import org.jaudiotagger.audio.AudioHeader
 import org.jaudiotagger.tag.FieldKey
 import org.jaudiotagger.tag.Tag
 import org.jaudiotagger.tag.TagField
+import org.jaudiotagger.tag.images.Artwork
 
 /**
  *
@@ -16,9 +17,9 @@ import org.jaudiotagger.tag.TagField
  */
 public class InfoBook {
 
-  private String artist, albumArtist, title, comment, year;
-  private String[] cover;
-  private int bookLength;
+  String artist, albumArtist, title, comment, year;
+  Artwork cover;
+  int bookLength;
 
   private LinkedList<InfoChapter> chapterList = new LinkedList<InfoChapter>();
 
@@ -65,7 +66,7 @@ public class InfoBook {
     comment = tag.getFirst(FieldKey.COMMENT)
     year = tag.getFirst(FieldKey.YEAR)
 
-    this.cover = tag.getFirst(FieldKey.COVER_ART).getBytes()
+    cover = tag.getFirstArtwork()
   }
 
   /**
@@ -81,11 +82,11 @@ public class InfoBook {
 
   /**
    *
-   * @param number
+   * @param index
    * @return
    */
-  public InfoChapter getChapter(int number) {
-    return chapterList.get(number);
+  public InfoChapter getChapter(int index) {
+    return chapterList.get(index);
   }
 
   /**
