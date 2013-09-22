@@ -36,7 +36,7 @@ public class InfoBook {
     chapters.eachLine {
       addChapter(it)
     }
-    sortChaptersAndInsertTSEnd();
+    sortChaptersAndFinalizeData();
   }
 
   def dumpAllMetaData(File fileWithMetadata) {
@@ -108,7 +108,7 @@ public class InfoBook {
   /**
    *
    */
-  public void sortChaptersAndInsertTSEnd() {
+  public void sortChaptersAndFinalizeData() {
     Collections.sort(chapterList);
     InfoChapter oic = null;
     int cnt = 1;
@@ -125,6 +125,40 @@ public class InfoBook {
     InfoChapter last = this.chapterList.getLast()
     last.tsEnd = timeMillisToString(this.bookLength)
 
+    Map<Integer, Integer> maxTitleNo = getMaxTitleNo()
+    int maxCDNo = getMaxCDNo()
+    for(InfoChapter ic: chapterList) {
+      ic.cdNoTotal = maxCDNo
+      ic.titleNoTotal = maxTitleNo.get(ic.cdNo)
+    }
+
+  }
+
+  /**
+   *
+   * @return
+   */
+  def int getMaxCDNo() {
+    int max = -1;
+    for(InfoChapter ic: chapterList) {
+      max = Math.max(max, ic.cdNo)
+    }
+    return max
+  }
+
+  /**
+   *
+   * @return
+   */
+  def Map<Integer, Integer> getMaxTitleNo() {
+    Map<Integer, Integer> result = new HashMap<Integer, Integer>()
+    for(InfoChapter ic: chapterList) {
+      if (result.containsKey(ic.cdNo))
+        result.put(ic.cdNo, Math.max(result.get(ic.cdNo), ic.titleNo))
+      else
+        result.put(ic.cdNo, ic.titleNo)
+    }
+    return result
   }
 
   def String timeMillisToString(int timeMillis) {

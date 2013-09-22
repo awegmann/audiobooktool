@@ -1,21 +1,11 @@
-package de.wegmann.config;
+package de.wegmann.config
 
-import de.wegmann.wrapper.mp4v2.Mp4Chaps;
 import de.wegmann.wrapper.util.ToolsLocation;
 import org.apache.commons.configuration.XMLConfiguration
 import org.jaudiotagger.audio.AudioFile
 import org.jaudiotagger.audio.AudioFileIO
-import org.jaudiotagger.audio.AudioHeader
 import org.jaudiotagger.tag.FieldKey
 import org.jaudiotagger.tag.Tag
-import org.jaudiotagger.tag.images.Artwork
-import org.jaudiotagger.tag.images.StandardArtwork;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Date;
 
 /**
  * This object contains all data to control the workflow
@@ -122,7 +112,7 @@ public class DataObj {
    */
   private void analyzeMetaDataFile() {
     bookInfo = new InfoBook(new File(fileMetaData));
-    bookInfo.sortChaptersAndInsertTSEnd();
+    bookInfo.sortChaptersAndFinalizeData();
   }
 
   public void writeMetaDataToChapterFile(File chapterFile, int chapterIndex) {
