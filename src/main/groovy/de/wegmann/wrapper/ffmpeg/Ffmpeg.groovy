@@ -1,5 +1,7 @@
 package de.wegmann.wrapper.ffmpeg
 
+import de.wegmann.config.DataObj
+import de.wegmann.config.InfoChapter
 import de.wegmann.wrapper.util.ToolsLocation
 import groovy.time.Duration
 import groovy.util.logging.Log
@@ -25,13 +27,26 @@ class Ffmpeg {
     protected String sourceAudioFile
 
     /**
+     *
+     */
+    DataObj dataObject;
+
+    /**
      * Constructor.
      * @param sourceAudioFile audio file to operate on.
      */
     public Ffmpeg(String sourceAudioFile) {
         super();
+        this.dataObject = DataObj.getInstance()
         this.sourceAudioFile = sourceAudioFile;
         this.tools = ToolsLocation.getInstance()
+    }
+
+    public Ffmpeg() {
+      super()
+      this.dataObject = DataObj.getInstance()
+      this.sourceAudioFile = this.dataObject.fileAudio;
+      this.tools = ToolsLocation.getInstance()
     }
 
     /**
@@ -67,6 +82,50 @@ class Ffmpeg {
             log.info "> $it"
         }
         new File(intermediateFile).renameTo(new File(destinationAudioFile))
+    }
+
+    /**
+     *
+     */
+    public void convertToMP3() {
+
+      Iterator<InfoChapter> infoChapterIterator = dataObject.getBookInfo().getChapterIterator();
+      while (infoChapterIterator.hasNext()) {
+        InfoChapter cur = infoChapterIterator.next()
+        // convert chapter ...
+        File curOut = convertToMP3(cur)
+        // set tag information ...
+        dataObject.writeMetaDataToChapterFile(curOut, cur)
+      }
+
+    }
+
+    /**
+     *
+     * @param infoChapter
+     */
+    public File convertToMP3(InfoChapter infoChapter) {
+
+      File outFile = dataObject.getFileOutput(infoChapter.titleNo, 3, ".mp3")
+
+      // ffmpeg -i /bla/Baldacci.flac -ss 00:01:00.00 -t 00:00:15.99 -acodec libmp3lame -ab 128k /bla/some.mp3
+      def process
+
+      if (infoChapter.tsEnd != null) {
+        process = [dataObject.execFfmpeg, "-i", dataObject.fileAudio,
+              "-ss", infoChapter.tsStart, "-to", infoChapter.tsEnd,
+                outFile].execute()
+      } else {
+        process = [dataObject.execFfmpeg, "-i", dataObject.fileAudio,
+                "-ss", infoChapter.tsStart,
+                outFile].execute()
+      }
+      process.err.eachLine {
+        log.info "> $it"
+      }
+
+      return outFile;
+
     }
 
     /**
