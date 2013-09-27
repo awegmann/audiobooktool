@@ -31,7 +31,7 @@ class Mp4TagsTest extends GroovyTestCase {
         assertEquals(0, tags.size())
 
         mp4tags.setTags(
-                [ "Name": "testName",
+                ["Name": "testName",
                         "Artist": "testArtist",
                         "Release Date": "2000",
                         "Album": "testAlbum",

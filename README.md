@@ -15,6 +15,10 @@ Native Tool Versions
 
 The native tools versions currently used by myself are ffmpeg 2.0.1 and mp4v2 version 2.0.0.
 
+* mp4v2 can be found here: http://code.google.com/p/mp4v2/
+* ffmpeg can be found here: http://www.ffmpeg.org/
+
+
 
 Building
 --------

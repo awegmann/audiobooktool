@@ -55,16 +55,16 @@ class Mp4ChapsTest extends GroovyTestCase {
         def testFileName = "src/test/resources/temp/Audiobook_Test_plain.m4a"
         def mp4Chaps = new Mp4Chaps(testFileName)
         try {
-            int oldFileSize=new File(testFileName).size()
+            int oldFileSize = new File(testFileName).size()
             mp4Chaps.importChapters(chaptersToImport)
-            int newFileSize=new File(testFileName).size()
+            int newFileSize = new File(testFileName).size()
             assertFalse(new File("src/test/resources/temp/Audiobook_Test_plain.chapters.txt").exists())
-            assertFalse(oldFileSize==newFileSize)
+            assertFalse(oldFileSize == newFileSize)
 
             def chaptersExported = mp4Chaps.exportChapters()
-            assertEquals(chaptersToImport,chaptersExported)
+            assertEquals(chaptersToImport, chaptersExported)
         } catch (WrapperException e) {
-            fail("no exception expected",e)
+            fail("no exception expected", e)
         }
 
     }

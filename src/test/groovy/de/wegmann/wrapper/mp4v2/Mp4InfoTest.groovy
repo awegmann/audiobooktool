@@ -18,16 +18,16 @@ class Mp4InfoTest extends GroovyTestCase {
 
     void tearDown() {
         def antBuilder = new AntBuilder()
-        antBuilder.delete(dir:"src/test/resources/temp")
+        antBuilder.delete(dir: "src/test/resources/temp")
     }
 
 
     void testListTags() {
         def mp4info = new Mp4Info("src/test/resources/temp/Audiobook_Test_with_Metadata.m4a")
         def tags = mp4info.listTags()
-        assertEquals(9,tags.size())
+        assertEquals(9, tags.size())
 
-        assertEquals("2013",tags.find{it.name == "Release Date"}.value)
+        assertEquals("2013", tags.find { it.name == "Release Date" }.value)
 
     }
 
@@ -48,7 +48,7 @@ class Mp4InfoTest extends GroovyTestCase {
             def tags = mp4info.listTags()
             fail("A WrapperException should be thrown...")
         } catch (WrapperException e) {
-            assertTrue("Wrong message in excpetion",e.msg.contains("error listing tags"))
+            assertTrue("Wrong message in excpetion", e.msg.contains("error listing tags"))
         }
 
     }

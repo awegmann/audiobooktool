@@ -36,13 +36,13 @@ class Mp4Info extends AbstractMp4Tool {
      * @return
      */
     List<Mp4Tag> listTags() {
-        def process = [ tools.mp4InfoExecutable, mp4File ].execute()
+        def process = [tools.mp4InfoExecutable, mp4File].execute()
         process.waitFor()
 
         def errorText = process.err.text
         if (errorText.contains("can't open")) {
-            log.log(Level.SEVERE,errorText)
-            throw new WrapperException(msg:"error listing tags",execOutput:errorText)
+            log.log(Level.SEVERE, errorText)
+            throw new WrapperException(msg: "error listing tags", execOutput: errorText)
         }
 
         List<Mp4Tag> artList = []
@@ -55,8 +55,8 @@ class Mp4Info extends AbstractMp4Tool {
                 def foundTag = knownInfoTags.find { knownTag -> it.startsWith(knownTag) }
                 if (foundTag != null) {
                     log.info(" found tag $foundTag")
-                    artList << new Mp4Tag(name:foundTag.trim()-":",value: it.substring(foundTag.length()+1))
-                }  else {
+                    artList << new Mp4Tag(name: foundTag.trim() - ":", value: it.substring(foundTag.length() + 1))
+                } else {
                     log.info(" $it seems to be a unknown tag")
                 }
             }
