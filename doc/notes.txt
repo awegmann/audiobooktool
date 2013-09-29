@@ -62,23 +62,30 @@ mergeToM4A
 ==========
 
 Merging flac+aax -> m4b
---join -a <flac-file> -m <aax-file> -o <outfile>
+--mergeToM4A -a <flac-file> -m <aax-file> -o <outfile>
 
 Merging flac+aax -> m4b - Bulk mode
---join --bulk -a <flac-dir> -m <aax-dir> -o <outdir>
+--mergeToM4A --bulk -a <flac-dir> -m <aax-dir> -o <outdir>
 
 Joining mp3 -> m4b
---join -a <input-dir> -o <outfile.m4b>
+--joinToM4B -a <input-dir> -o <outfile.m4b>
 oder
---join -a <file1> -a <file2> ... -a <fileN> -o <outfile.m4b>
+--joinToM4B -a <file1> -a <file2> ... -a <fileN> -o <outfile.m4b>
 
 
 splitToMP3
 ==========
 
 Splitting flac+aax -> mp3
---split -a <flac-file> -m <aax-file> -o <output-dir>
+--splitToMP3 -a <flac-file> -m <aax-file> -o <output-dir>
 
 Splitting m4b -> mp3
---split -a <m4b> -> -o <output-dir>
+--splitToMP3 -a <m4b> -> -o <output-dir>
+
+
+splitToM4A
+==========
+
+Splitting one m4a -> m4a
+--splitToM4A -a <m4b> -> o <output-dir>
 

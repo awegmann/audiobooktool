@@ -11,7 +11,7 @@ class Mp4ArtInfo {
 /**
  * Wrapper class of mp4art tools to extract and add images on mp4 files.
  */
-@Log
+@Log4j
 class Mp4Art extends AbstractMp4Tool {
 
     /**

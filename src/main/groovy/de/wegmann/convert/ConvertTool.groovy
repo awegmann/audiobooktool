@@ -26,8 +26,7 @@ class ConvertTool {
     def cli = new CliBuilder(usage: 'ConvertTool -a file -m file [-o file]\nconverts an audio file to a ".m4b" audio' +
             ' book and copies all metadata from another file to it.')
     cli.h(longOpt: 'help', 'usage information')
-    cli.s(longOpt: 'split', 'split one input file to many output files (by chapter info)')
-    cli.j(longOpt: 'join', 'join many input file to one output files (and create chapter info)')
+    cli.c(longOpt: 'cmd', 'command to execute can be splitToMP3, splitToM4A, joinToM4A')
     cli.a(longOpt: 'audioFrom', args: 1, required: true,
             argName: 'audiofile', 'use audiofile as audio source to convert from')
     cli.m(longOpt: 'metaFrom', args: 1, required: true,

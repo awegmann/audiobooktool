@@ -1,6 +1,6 @@
 package de.wegmann.wrapper.mp4v2
 
-import groovy.util.logging.Log
+import groovy.util.logging.Log4j
 
 import java.util.logging.Level
 
@@ -9,7 +9,7 @@ import java.util.logging.Level
  * User: andy
  * Date: 20.05.13
  */
-@Log
+@Log4j
 class Mp4Info extends AbstractMp4Tool {
 
     String[] knownInfoTags = [

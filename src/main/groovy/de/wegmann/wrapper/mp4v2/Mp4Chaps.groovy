@@ -1,12 +1,12 @@
 package de.wegmann.wrapper.mp4v2
 
-import groovy.util.logging.Log
+import groovy.util.logging.Log4j
 
 /**
  * User: andy
  * Date: 01.06.13
  */
-@Log
+@Log4j
 class Mp4Chaps extends AbstractMp4Tool {
     /**
      * Constructor.

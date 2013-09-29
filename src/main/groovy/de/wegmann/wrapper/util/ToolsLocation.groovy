@@ -1,13 +1,12 @@
 package de.wegmann.wrapper.util
 
-import groovy.util.logging.Log;
-
-import org.apache.commons.configuration.XMLConfiguration;
+import groovy.util.logging.Log4j
+import org.apache.commons.configuration.XMLConfiguration
 
 /**
  * Class to supply native tools locations.
  */
-@Log
+@Log4j
 class ToolsLocation {
 
   private static INSTANCE = null

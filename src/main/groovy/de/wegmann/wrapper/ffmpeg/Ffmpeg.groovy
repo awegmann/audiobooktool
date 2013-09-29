@@ -5,6 +5,7 @@ import de.wegmann.config.InfoChapter
 import de.wegmann.wrapper.util.ToolsLocation
 import groovy.time.Duration
 import groovy.util.logging.Log
+import groovy.util.logging.Log4j
 
 import java.security.InvalidParameterException
 
@@ -13,7 +14,7 @@ import java.security.InvalidParameterException
  * User: Andreas Wegmann
  * Date: 21.06.13
  */
-@Log
+@Log4j
 class Ffmpeg {
 
     /**
