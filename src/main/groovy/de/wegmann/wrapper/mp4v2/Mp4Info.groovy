@@ -41,7 +41,7 @@ class Mp4Info extends AbstractMp4Tool {
 
         def errorText = process.err.text
         if (errorText.contains("can't open")) {
-            log.log(Level.SEVERE, errorText)
+            log.error(errorText)
             throw new WrapperException(msg: "error listing tags", execOutput: errorText)
         }
 
