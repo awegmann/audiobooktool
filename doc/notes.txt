@@ -58,14 +58,14 @@ usage: ConvertTool -a file -m file [-o file]
                               (by chapter info)
 
 
-mergeToM4A
+mergeToM4B
 ==========
 
 Merging flac+aax -> m4b
---mergeToM4A -a <flac-file> -m <aax-file> -o <outfile>
+--mergeToM4B -a <flac-file> -m <aax-file> -o <outfile>
 
 Merging flac+aax -> m4b - Bulk mode
---mergeToM4A --bulk -a <flac-dir> -m <aax-dir> -o <outdir>
+--mergeToM4B --bulk -a <flac-dir> -m <aax-dir> -o <outdir>
 
 Joining mp3 -> m4b
 --joinToM4B -a <input-dir> -o <outfile.m4b>

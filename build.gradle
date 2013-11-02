@@ -33,7 +33,7 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'Audiobook-Tool',
                 'Implementation-Version': version,
-                'Main-Class': 'de.wegmann.convert.ConvertTool'
+                'Main-Class': 'de.audiobooktool.convert.ConvertTool'
 
     }
 }
