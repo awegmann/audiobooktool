@@ -1,14 +1,17 @@
 package de.audiobooktool.config
 
+import de.audiobooktool.wrapper.ffmpeg.Ffmpeg
 import de.audiobooktool.wrapper.mp4v2.Mp4Chaps
+import de.audiobooktool.wrapper.mp4v2.Mp4Info
+import de.audiobooktool.wrapper.mp4v2.Mp4Tag
+import groovy.time.Duration
 import org.jaudiotagger.audio.AudioFile
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.audio.AudioHeader
+import org.jaudiotagger.audio.exceptions.CannotReadException
 import org.jaudiotagger.tag.FieldKey
 import org.jaudiotagger.tag.Tag
-import org.jaudiotagger.tag.TagField
 import org.jaudiotagger.tag.images.Artwork
-
 /**
  *
  * User: WagnerOl
@@ -40,22 +43,63 @@ public class BookInfo {
     sortChaptersAndFinalizeData();
   }
 
+  /**
+   * Read metadata from given audio file and set properties for artist, albumArtist, title,
+   * comment, year, bookLength and cover.
+   * Reading the metadata ist first done with jaudiotagger, if this fails, it is done with
+   * Mp4Tools wrapper and FFmpeg.
+   *
+   * @param fileWithMetadata file which metadata is read from
+   */
+  void readInfoFromMetafile(File fileWithMetadata) {
+    try {
+      AudioFile f = AudioFileIO.read(fileWithMetadata);
 
-  def readInfoFromMetafile(File fileWithMetadata) {
-    AudioFile f = AudioFileIO.read(fileWithMetadata);
+      AudioHeader header = f.getAudioHeader();
+      // TODO: needs book length with milliseconds detail!
+      bookLength = header.getTrackLength() * 1000;
 
-    AudioHeader header = f.getAudioHeader();
-    // TODO: needs book length with milliseconds detail!
-    bookLength = header.getTrackLength() * 1000;
+      Tag tag = f.getTag();
+      artist = tag.getFirst(FieldKey.ARTIST)
+      albumArtist = tag.getFirst(FieldKey.ALBUM_ARTIST)
+      title = tag.getFirst(FieldKey.TITLE)
+      comment = tag.getFirst(FieldKey.COMMENT)
+      year = tag.getFirst(FieldKey.YEAR)
 
-    Tag tag = f.getTag();
-    artist = tag.getFirst(FieldKey.ARTIST)
-    albumArtist = tag.getFirst(FieldKey.ALBUM_ARTIST)
-    title = tag.getFirst(FieldKey.TITLE)
-    comment = tag.getFirst(FieldKey.COMMENT)
-    year = tag.getFirst(FieldKey.YEAR)
+      cover = tag.getFirstArtwork()
+    }
+    catch (CannotReadException e) {
+      Ffmpeg ffmpeg = new Ffmpeg(fileWithMetadata.absolutePath)
+      Duration duration = ffmpeg.getDuration()
+      bookLength = duration.toMilliseconds()
 
-    cover = tag.getFirstArtwork()
+      Mp4Info mp4Info = new Mp4Info(fileWithMetadata.absolutePath)
+      List<Mp4Tag> tags = mp4Info.listTags()
+
+      for (int i = 0; i < tags.size(); i++) {
+        Mp4Tag tag = tags.get(i);
+
+        if (tag.name == Mp4Tag.ARTIST) {
+          artist = tag.value
+        }
+
+        if (tag.name == Mp4Tag.ALBUM_ARTIST) {
+          albumArtist = tag.value
+        }
+
+        if (tag.name == Mp4Tag.NAME) {
+          title = tags.value
+        }
+
+        if (tag.name == Mp4Tag.COMMENTS) {
+          comment = tag.value
+        }
+
+        if (tag.name == Mp4Tag.RELEASE_DATE) {
+          year = tag.value
+        }
+      }
+    }
   }
 
   /**
@@ -104,7 +148,7 @@ public class BookInfo {
 
     ChapterInfo oic = null;
     int cnt = 1;
-    for(ChapterInfo ic: chapterList) {
+    for (ChapterInfo ic : chapterList) {
       if (ic.titleNo == -1)
         ic.titleNo = cnt++;
 
@@ -119,7 +163,7 @@ public class BookInfo {
 
     Map<Integer, Integer> maxTitleNo = getMaxTitleNo()
     int maxCDNo = getMaxCDNo()
-    for(ChapterInfo ic: chapterList) {
+    for (ChapterInfo ic : chapterList) {
       ic.cdNoTotal = maxCDNo
       ic.titleNoTotal = maxTitleNo.get(ic.cdNo)
     }
@@ -132,7 +176,7 @@ public class BookInfo {
    */
   def int getMaxCDNo() {
     int max = -1;
-    for(ChapterInfo ic: chapterList) {
+    for (ChapterInfo ic : chapterList) {
       max = Math.max(max, ic.cdNo)
     }
     return max
@@ -144,7 +188,7 @@ public class BookInfo {
    */
   def Map<Integer, Integer> getMaxTitleNo() {
     Map<Integer, Integer> result = new HashMap<Integer, Integer>()
-    for(ChapterInfo ic: chapterList) {
+    for (ChapterInfo ic : chapterList) {
       if (result.containsKey(ic.cdNo))
         result.put(ic.cdNo, Math.max(result.get(ic.cdNo), ic.titleNo))
       else
@@ -154,9 +198,9 @@ public class BookInfo {
   }
 
   def String timeMillisToString(int timeMillis) {
-    int seconds = ((int)(this.bookLength / 1000)) % 60
-    int minutes = ((int)(this.bookLength / (1000*60))) % 60
-    int hours   = ((int)(this.bookLength / (1000*60*60)))
+    int seconds = ((int) (this.bookLength / 1000)) % 60
+    int minutes = ((int) (this.bookLength / (1000 * 60))) % 60
+    int hours = ((int) (this.bookLength / (1000 * 60 * 60)))
     int millis = this.bookLength % 1000
 
     return "$hours".padLeft(2, '0') + ":" + "$minutes".padLeft(2, '0') + ":" + "$seconds".padLeft(2, '0') + "." + "$millis".padLeft(3, '0')
@@ -170,7 +214,7 @@ public class BookInfo {
     sb.append("Comment: $comment \n")
     sb.append("Year: $year \n")
     for (int i = 0; i < getNoOfChapters(); i++) {
-      int chapterNo = i+1
+      int chapterNo = i + 1
       sb.append("  " + "$chapterNo".padLeft(3, ' ') + " Chapter: " + getChapter(i) + "\n")
     }
     return sb.toString()
