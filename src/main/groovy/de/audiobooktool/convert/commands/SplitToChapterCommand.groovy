@@ -36,26 +36,39 @@ class SplitToChapterCommand extends AbstractToolCommand {
      */
     public void writeMetaDataToChapterFile(File chapterFile, ChapterInfo chapter, BookInfo bookInfo) {
 
-        AudioFile f = AudioFileIO.read(chapterFile);
-        Tag tag = f.getTag();
+      AudioFile f = AudioFileIO.read(chapterFile);
+      Tag tag = f.getTag();
 
-        // Tags direct from book info
+      // Take care, it's not allowed to write empty tags!
+
+      // Tags direct from book info
+      if (bookInfo.artist != null)
         tag.setField(FieldKey.ARTIST, bookInfo.artist)
+      if (bookInfo.albumArtist != null)
         tag.setField(FieldKey.ALBUM_ARTIST, bookInfo.albumArtist)
+      if (bookInfo.comment != null)
         tag.setField(FieldKey.COMMENT, bookInfo.comment)
+      if (bookInfo.year != null)
         tag.setField(FieldKey.YEAR, bookInfo.year)
+      if (bookInfo.title != null)
         tag.setField(FieldKey.ALBUM, bookInfo.title)
 
+      if (bookInfo.cover != null)
         tag.addField(bookInfo.cover)
 
-        // Tags direct from chapter ...
+      // Tags direct from chapter ...
+      if (chapter.title != null)
         tag.setField(FieldKey.TITLE, chapter.title)
+      if (chapter.cdNo != null)
         tag.setField(FieldKey.DISC_NO, "" + chapter.cdNo)
+      if (chapter.cdNoTotal != null)
         tag.setField(FieldKey.DISC_TOTAL, "" + chapter.cdNoTotal)
+      if (chapter.titleNo != null)
         tag.setField(FieldKey.TRACK, "" + chapter.titleNo)
+      if (chapter.titleNoTotal != null)
         tag.setField(FieldKey.TRACK_TOTAL, "" + chapter.titleNoTotal)
 
-        f.commit();
+      f.commit();
     }
 
     /**
