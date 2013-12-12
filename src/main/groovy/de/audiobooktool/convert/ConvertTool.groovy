@@ -21,14 +21,14 @@ class ConvertTool {
         AbstractToolCommand command
         OutputFormatEnum outputFormat
 
-        def cli = new CliBuilder(usage: 'ConvertTool -a file -m file [-o file]\nconverts an audio file to a ".m4b" audio' +
+        def cli = new CliBuilder(usage: 'ConvertTool -c joinToM4A -a file -m file [-o file]\nconverts an audio file to a ".m4b" audio' +
                 ' book and copies all metadata from another file to it.')
         cli.h(longOpt: 'help', 'usage information')
         cli.c(longOpt: 'cmd', 'command to execute can be splitToMP3, splitToM4A, joinToM4A', args: 1, required: true)
         cli.a(longOpt: 'audioFrom', args: 1, required: true,
                 argName: 'audiofile', 'use audio file as audio source to convert from')
-        cli.m(longOpt: 'metaFrom', args: 1, required: true,
-                argName: 'audiofile', 'use audio file as meta info source to copy from')
+        cli.m(longOpt: 'metaFrom', args: 1, required: false,
+                argName: 'audiofile', 'use audio file as meta info source to copy from, default use audioFrom value')
         cli.o(longOpt: 'outputTo', args: 1, required: false,
                 argName: 'file', 'if file is a directory, put the converted file in here, if it\' a file name use filename ' +
                 'for output (default is base name of metaFrom-file plus .m4b extension)')
@@ -71,7 +71,7 @@ class ConvertTool {
 
         ConversionParameterObj data = new ConversionParameterObj(
                 fileAudio: (String) opt.a,
-                fileMetaData: (String) opt.m,
+                fileMetaData: (String) opt.m ? opt.m : opt.a,
                 fileOutputBase: opt.o ? opt.o : null,
                 dryRun: opt.d,
                 outputFormat: outputFormat
