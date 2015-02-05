@@ -34,7 +34,7 @@ class Mp4Chaps extends AbstractMp4Tool {
         def output = process.text
         if (output.startsWith("Exporting")) {
             def chapterFileMatch = output =~ /chapter file "(.*)"/
-            def chapterFileName = chapterFileMatch[0][1]
+            String chapterFileName = chapterFileMatch[0][1]
             log.info "Chapterfile is $chapterFileName"
             File chapterFile = new File(chapterFileName)
             String chapterDefinitions = chapterFile.text

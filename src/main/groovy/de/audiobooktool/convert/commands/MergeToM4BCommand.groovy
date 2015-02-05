@@ -6,6 +6,7 @@ import de.audiobooktool.wrapper.mp4v2.Mp4Art
 import de.audiobooktool.wrapper.mp4v2.Mp4Chaps
 import de.audiobooktool.wrapper.mp4v2.Mp4Info
 import de.audiobooktool.wrapper.mp4v2.Mp4Tags
+import groovy.time.Duration
 
 /**
  * User: andy
@@ -64,6 +65,20 @@ class MergeToM4BCommand extends AbstractToolCommand {
     }
 
     def audioFlac = new Ffmpeg(audioFile)
+
+    // if audio and meta info is in different files, check if audio length of these files match
+    if (audioFile != metaFile) {
+      Duration audioFileDuration = audioFlac.getDuration()
+      Duration metaFileDuration = new Ffmpeg(metaFile).getDuration()
+
+      if (Math.abs(audioFileDuration.toMilliseconds() - metaFileDuration.toMilliseconds()) > 250 ) {
+        println "Audio and meta file duration differs!"
+        println " audio file:  ${audioFileDuration} from ${audioFile}"
+        println " meta file:   ${metaFileDuration} form ${metaFile}"
+        thrown new IllegalStateException("audio length differs")
+      }
+    }
+
     if (destFile.endsWith(".m4a")) {
       audioFlac.convertToM4a(destFile)
     } else if (destFile.endsWith(".m4b")) {
