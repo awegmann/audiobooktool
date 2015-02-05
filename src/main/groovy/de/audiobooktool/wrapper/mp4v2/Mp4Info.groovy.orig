@@ -1,4 +1,4 @@
-package de.audiobooktool.wrapper.mp4v2
+package de.wegmann.wrapper.mp4v2
 
 import groovy.util.logging.Log4j
 /**
@@ -33,12 +33,12 @@ class Mp4Info extends AbstractMp4Tool {
      * @return
      */
     List<Mp4Tag> listTags() {
-        def process = [ tools.mp4InfoExecutable, mp4File ].execute()
+        def process = [tools.mp4InfoExecutable, mp4File].execute()
         process.waitFor()
 
         def errorText = process.err.text
         if (errorText.contains("can't open")) {
-            log.error(errorText)
+            log.log(Level.SEVERE, errorText)
             throw new WrapperException(msg: "error listing tags", execOutput: errorText)
         }
 

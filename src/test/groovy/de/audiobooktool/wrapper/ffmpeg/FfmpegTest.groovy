@@ -2,6 +2,8 @@ package de.audiobooktool.wrapper.ffmpeg
 
 import groovy.time.Duration
 
+import groovy.time.Duration
+
 import java.security.MessageDigest
 
 /**
