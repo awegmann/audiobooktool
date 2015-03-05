@@ -33,18 +33,20 @@ class Mp4Info extends AbstractMp4Tool {
      * @return
      */
     List<Mp4Tag> listTags() {
+        log.info("getting Metainfo from $mp4File")
         def process = [ tools.mp4InfoExecutable, mp4File ].execute()
-        process.waitFor()
+        def output=new StringBuilder(1024)
+        def error=new StringBuilder(1024)
+        process.waitForProcessOutput(output, error)
 
-        def errorText = process.err.text
-        if (errorText.contains("can't open")) {
-            log.error(errorText)
-            throw new WrapperException(msg: "error listing tags", execOutput: errorText)
+        if (error.toString().contains("can't open")) {
+            log.error(error.toString())
+            throw new WrapperException(msg: "error listing tags", execOutput: error.toString())
         }
 
         List<Mp4Tag> artList = []
 
-        process.text.eachLine {
+        output.eachLine {
             log.info "> $it"
 
             if (it.startsWith(" ") && it.contains(":")) { // seems to be a tag info

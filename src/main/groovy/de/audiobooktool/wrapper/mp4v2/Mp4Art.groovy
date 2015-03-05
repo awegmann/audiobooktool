@@ -57,6 +57,7 @@ class Mp4Art extends AbstractMp4Tool {
      * @param imageFile image to add
      */
     public void addImage(String imageFile) {
+      log.info("adding $imageFile to $mp4File")
         def process = [tools.mp4ArtExecutable, "--add", imageFile, mp4File].execute()
         process.waitFor()
         if (process.exitValue() != 0) {
