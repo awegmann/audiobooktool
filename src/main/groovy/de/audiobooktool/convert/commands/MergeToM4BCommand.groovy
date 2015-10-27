@@ -71,7 +71,7 @@ class MergeToM4BCommand extends AbstractToolCommand {
       Duration audioFileDuration = audioFlac.getDuration()
       Duration metaFileDuration = new Ffmpeg(metaFile).getDuration()
 
-      if (Math.abs(audioFileDuration.toMilliseconds() - metaFileDuration.toMilliseconds()) > 250 ) {
+      if (Math.abs(audioFileDuration.toMilliseconds() - metaFileDuration.toMilliseconds()) > 500 ) {
         println "Audio and meta file duration differs!"
         println " audio file:  ${audioFileDuration} from ${audioFile}"
         println " meta file:   ${metaFileDuration} form ${metaFile}"
