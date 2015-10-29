@@ -1,9 +1,8 @@
----
+sudo: required
 language: groovy
 
-addons:
-  apt:
-    packages:
-    - ffmpeg
-    - mp4v2-utils
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq ffmpeg
+  - sudo apt-get install -qq mp4v2-utils
 
